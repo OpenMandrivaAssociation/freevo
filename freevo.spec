@@ -1,5 +1,5 @@
 %define	name 	freevo
-%define version 1.7.2
+%define version 1.7.3
 %define release %mkrel 1 
 
 %define 	_cachedir /var/cache
@@ -25,7 +25,6 @@ Patch1: 	%{name}-resolution.patch
 Patch5: 	%{name}-webserver.patch
 Patch6: 	%{name}-boot.patch
 Patch7: 	%{name}-volume.patch
-Patch12:	%{name}-1.6.2-elementtree.patch
 License: 	GPL
 Group: 		Video
 Buildarch:	noarch
@@ -71,7 +70,6 @@ rm -rf $RPM_BUILD_ROOT
 %patch5 -p0
 %patch6 -p0
 #%patch7 -p0
-%patch12 -p0
 
 %build
 find . -name CVS | xargs rm -rf
@@ -275,6 +273,5 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %attr(755,root,root) %{_sysconfdir}/rc.d/init.d/*
 %{py_sitedir}/freevo
 %{py_sitedir}/*.egg-info
-
-
-
+%attr(777,root,root) %dir %{_docdir}/%{name}-%{version}
+%{_docdir}/%{name}-%{version}/*
