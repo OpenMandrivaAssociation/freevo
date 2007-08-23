@@ -1,6 +1,6 @@
 %define	name 	freevo
 %define version 1.7.3
-%define release %mkrel 1 
+%define release %mkrel 2
 
 %define 	_cachedir /var/cache
 %define         py_ver 	  %(python -c 'import sys; print sys.version[:3]')
@@ -53,6 +53,9 @@ Requires:	python-lirc >= 0.0.4
 Requires:	mplayer, tvtime, xine-ui, xmltv, PyXML, libjpeg-progs, mencoder, cdparanoia, vorbis-tools, util-linux, python-numeric, lsdvd, python-osd, xmltv-grabbers
 Requires(pre):  rpm-helper
 Requires(post): rpm-helper 
+BuildRequires:  desktop-file-utils
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
 
 %description
 Freevo is a Linux application that turns a PC with a TV capture card
@@ -152,19 +155,43 @@ install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.
 #####################
 # Adding a menu entry
 ####################
+mkdir -p $RPM_BUILD_ROOT%{_menudir}
+cat > $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
+?package(%name): needs="x11" \
+        section="Multimedia/Video" \
+        title=%name \
+        longtitle="%{summary}" \
+        command="%{_bindir}/%{name}" \
+        icon="%{name}.png" \
+        startup_notify="true" \
+        accept_url="true" \
+        multiple_files="true" \
+        xdg="true"
+EOF
+
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Encoding=UTF-8
-Name="Freevo"
+Name=%name
 Comment="%{summary}"
 Exec="%{_bindir}/%{name}"
 Icon=%{name}
 Terminal=false
-Type=Applications
+Type=Application
 StartupNotify=true
-Categories=AudioVideo;TV;Player;Recorder;X-MandrivaLinux-Multimedia
+Categories=AudioVideo;TV;Player;Recorder;X-MandrivaLinux-Multimedia;
 EOF
+
+
+# XDG Menu
+desktop-file-install --vendor="" \
+	--add-category="AudioVideo"\
+	--add-category="TV"\
+	--add-category="Player"\
+	--add-category="Recorder" \
+	--add-category="X-MandrivaLinux-Multimedia" \
+	--dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
 
 ####################
 # About locales... #
@@ -177,7 +204,6 @@ find %buildroot/%_datadir/locale -name "*.po" -exec rm -f {} \;
 # Cleaning
 ####################
 rm -rf $RPM_BUILD_ROOT/%{_datadir}/fxd/web*
-
 
 %pre
 %_pre_useradd %{name} %{_datadir}/%{name} /bin/bash
@@ -252,7 +278,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %name.lang
 %defattr(-,root,root)
-%doc COPYING ChangeLog FAQ INSTALL README TODO Docs local_conf.py.example
+%doc COPYING ChangeLog FAQ INSTALL README local_conf.py.example Docs/*
 %{_datadir}/%{name}
 %{_bindir}/freevo
 %{_iconsdir}/freevo.png
@@ -274,4 +300,4 @@ rm -rf $RPM_BUILD_ROOT
 %{py_sitedir}/freevo
 %{py_sitedir}/*.egg-info
 %attr(777,root,root) %dir %{_docdir}/%{name}-%{version}
-%{_docdir}/%{name}-%{version}/*
+%{_menudir}/%{name}
