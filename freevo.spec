@@ -299,5 +299,5 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %attr(755,root,root) %{_sysconfdir}/rc.d/init.d/*
 %{py_sitedir}/freevo
 %{py_sitedir}/*.egg-info
-%attr(777,root,root) %dir %{_docdir}/%{name}-%{version}
 %{_menudir}/%{name}
+%{_defaultdocdir}/%{name}-%{version}
