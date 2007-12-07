@@ -1,6 +1,6 @@
 %define	name 	freevo
 %define version 1.7.3
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define 	_cachedir /var/cache
 %define         py_ver 	  %(python -c 'import sys; print sys.version[:3]')
@@ -25,13 +25,13 @@ Patch1: 	%{name}-resolution.patch
 Patch5: 	%{name}-webserver.patch
 Patch6: 	%{name}-boot.patch
 Patch7: 	%{name}-volume.patch
-License: 	GPL
+License: 	GPLv2+
 Group: 		Video
 Buildarch:	noarch
 BuildRoot: 	%{_tmppath}/%{name}-buildroot
 BuildRequires: 	docbook-utils
 BuildRequires:  wget
-BuildRequires:  python >= 2.3
+%py_requries
 BuildRequires:  pygame >= 1.5
 BuildRequires:  python-twisted >= 1.1.0
 BuildRequires:  python-imaging >= 1.1.4
@@ -41,7 +41,6 @@ BuildRequires:	python-kaa-imlib2
 BuildRequires:  python-pyxml
 BuildRequires:  python-devel
 BuildRequires:	python-beautifulsoup >= 3.0.3
-Requires:  	python >= 2.3
 Requires:	pygame >= 1.5
 Requires:	python-twisted >= 1.1.0
 Requires:	python-imaging >= 1.1.4
@@ -53,7 +52,6 @@ Requires:	python-lirc >= 0.0.4
 Requires:	mplayer, tvtime, xine-ui, xmltv, PyXML, libjpeg-progs, mencoder, cdparanoia, vorbis-tools, util-linux, python-numeric, lsdvd, python-osd, xmltv-grabbers
 Requires(pre):  rpm-helper
 Requires(post): rpm-helper 
-BuildRequires:  desktop-file-utils
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -155,42 +153,18 @@ install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.
 #####################
 # Adding a menu entry
 ####################
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
-cat > $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
-?package(%name): needs="x11" \
-        section="Multimedia/Video" \
-        title=%name \
-        longtitle="%{summary}" \
-        command="%{_bindir}/%{name}" \
-        icon="%{name}.png" \
-        startup_notify="true" \
-        accept_url="true" \
-        multiple_files="true" \
-        xdg="true"
-EOF
-
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=%name
-Comment="%{summary}"
-Exec="%{_bindir}/%{name}"
+Comment=%{summary}
+Exec=%{_bindir}/%{name}
 Icon=%{name}
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=AudioVideo;TV;Player;Recorder;X-MandrivaLinux-Multimedia;
+Categories=AudioVideo;TV;Player;Recorder;
 EOF
-
-
-# XDG Menu
-desktop-file-install --vendor="" \
-	--add-category="AudioVideo"\
-	--add-category="TV"\
-	--add-category="Player"\
-	--add-category="Recorder" \
-	--add-category="X-MandrivaLinux-Multimedia" \
-	--dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
 
 ####################
 # About locales... #
@@ -298,5 +272,4 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %attr(755,root,root) %{_sysconfdir}/rc.d/init.d/*
 %{py_sitedir}/freevo
 %{py_sitedir}/*.egg-info
-%{_menudir}/%{name}
 %{_defaultdocdir}/%{name}-%{version}
