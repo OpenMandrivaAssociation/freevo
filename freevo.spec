@@ -31,7 +31,7 @@ Buildarch:	noarch
 BuildRoot: 	%{_tmppath}/%{name}-buildroot
 BuildRequires: 	docbook-utils
 BuildRequires:  wget
-%py_requries
+%py_requires
 BuildRequires:  pygame >= 1.5
 BuildRequires:  python-twisted >= 1.1.0
 BuildRequires:  python-imaging >= 1.1.4
