@@ -1,6 +1,6 @@
 %define	name 	freevo
-%define version 1.7.3
-%define release %mkrel 3
+%define version 1.7.4
+%define release %mkrel 1
 
 %define 	_cachedir /var/cache
 %define         py_ver 	  %(python -c 'import sys; print sys.version[:3]')
@@ -13,7 +13,7 @@ Name: 		%{name}
 Version: 	%{version}
 Release: 	%{release}
 URL:            http://freevo.sourceforge.net/
-Source0: 	http://belnet.dl.sourceforge.net/sourceforge/freevo/%{name}-%{version}.tar.bz2
+Source0: 	http://belnet.dl.sourceforge.net/sourceforge/freevo/%{name}-%{version}.tar.gz
 Source11:	freevo-mail-0.6.tgz 
 Source1: 	redhat-boot_config
 Source2:	local_conf.py
