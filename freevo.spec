@@ -28,6 +28,7 @@ Patch7: 	%{name}-volume.patch
 License: 	GPLv2+
 Group: 		Video
 Buildarch:	noarch
+BuildRoot: 	%{_tmppath}/%{name}-buildroot
 BuildRequires: 	docbook-utils
 BuildRequires:  wget
 %py_requires
