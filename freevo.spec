@@ -8,7 +8,7 @@
 # Set default freevo parameters
 %define display  x11
 
-Summary:        Freevo is an open-source digital video jukebox 
+Summary:        Open-source digital video jukebox 
 Name: 		%{name}
 Version: 	%{version}
 Release: 	%{release}
