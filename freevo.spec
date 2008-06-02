@@ -1,5 +1,5 @@
 %define	name 	freevo
-%define version 1.8.0
+%define version 1.8.1
 %define release %mkrel 1
 
 %define 	_cachedir /var/cache
