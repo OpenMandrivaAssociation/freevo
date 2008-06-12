@@ -183,7 +183,9 @@ rm -rf $RPM_BUILD_ROOT/%{_datadir}/fxd/web*
 
 %post
 rm -rf /var/log/freevo 2>/dev/null
+%if %mdkversion < 200900
 %{update_menus}
+%endif
 
 #Determining TV_NORM & CHANNEL_LIST from local clock
 ZONE=`grep "ZONE" /etc/sysconfig/clock | sed -e "s/^ZONE\=\(.*\)\/\(.*\)/\1/g"`
@@ -246,7 +248,9 @@ fi;
 rm -rf $RPM_BUILD_ROOT
 
 %postun
+%if %mdkversion < 200900
 %{clean_menus}
+%endif
 %_postun_userdel %{name}
 
 %files -f %name.lang
