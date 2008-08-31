@@ -1,6 +1,6 @@
 %define	name 	freevo
 %define version 1.8.1
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define 	_cachedir /var/cache
 %define         py_ver 	  %(python -c 'import sys; print sys.version[:3]')
