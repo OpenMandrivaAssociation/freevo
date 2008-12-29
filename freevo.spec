@@ -41,6 +41,7 @@ BuildRequires:	python-kaa-imlib2
 BuildRequires:  python-pyxml
 BuildRequires:  python-devel
 BuildRequires:	python-beautifulsoup >= 3.0.3
+BuildRequires:  python-numeric
 Requires:	pygame >= 1.5
 Requires:	python-twisted >= 1.1.0
 Requires:	python-imaging >= 1.1.4
