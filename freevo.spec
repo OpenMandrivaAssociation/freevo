@@ -1,5 +1,5 @@
 %define	name 	freevo
-%define version 1.8.3
+%define version 1.9.0
 %define release %mkrel 1
 
 %define 	_cachedir /var/cache
@@ -21,7 +21,7 @@ Source4:	firebird.py
 Source7:	freevo_tvgrab
 Source8:	mute
 Source9:	unmute
-Patch1: 	%{name}-resolution.patch
+Patch0:		%{name}-build.patch
 Patch5: 	%{name}-webserver.patch
 Patch6: 	%{name}-boot.patch
 Patch7: 	%{name}-volume.patch
@@ -68,7 +68,7 @@ Available rpmbuild rebuild options :
 %prep
 rm -rf $RPM_BUILD_ROOT
 %setup -q
-%patch1 -p0
+%patch0 -p0
 %patch5 -p0
 %patch6 -p0
 #%patch7 -p0
