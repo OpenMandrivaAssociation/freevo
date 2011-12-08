@@ -82,11 +82,11 @@ find . -name "*.py" |xargs chmod 644
 
 #./autogen.sh
 #Building freevo
-cd $RPM_BUILD_DIR/%{name}-%{version}/
+cd %{_builddir}/%{name}-%{version}/
 env CFLAGS="$RPM_OPT_FLAGS" python setup.py build 
 
 #Building mail menu
-#cd $RPM_BUILD_DIR/%{name}-%{version}/*mail*
+#cd %{_builddir}/%{name}-%{version}/*mail*
 #PYTHONPATH=../build/lib env CFLAGS="$RPM_OPT_FLAGS" python setup.py build
 
 
@@ -139,7 +139,7 @@ install -m 755 boot/webserver %{buildroot}%{_initrddir}/freevo_webserver
 # Installing Plugins
 ####################
 # Mailer Plugin
-#cd $RPM_BUILD_DIR/%{name}-%{version}/*mail*
+#cd %{_builddir}/%{name}-%{version}/*mail*
 #PYTHONPATH=../build/lib python setup.py install %{?_without_compile_obj:--no-compile} --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 #
 install %SOURCE4 $RPM_BUILD_ROOT/%{py_sitedir}/freevo/plugins
@@ -147,9 +147,9 @@ install %SOURCE4 $RPM_BUILD_ROOT/%{py_sitedir}/freevo/plugins
 ###############
 # Copying icons
 ###############
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
+install -D -m 644 %{_builddir}/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
+install -D -m 644 %{_builddir}/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
+install -D -m 644 %{_builddir}/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
 
 #####################
 # Adding a menu entry
