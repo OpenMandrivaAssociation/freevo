@@ -1,0 +1,26 @@
+--- boot/webserver.orig	2003-12-18 18:23:30.000000000 +0100
++++ boot/webserver	2003-12-18 18:26:12.000000000 +0100
+@@ -21,8 +21,6 @@
+ . /etc/freevo/boot_config
+ 
+ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
+-DAEMON_START="$FREEVO_HOME/freevo webserver start"
+-DAEMON_STOP="$FREEVO_HOME/freevo webserver stop"
+ NAME="webserver"
+ 
+ test -f $DAEMON || exit 0
+@@ -31,12 +29,12 @@
+ case "$1" in
+   start)
+     echo -n "Starting $NAME: "
+-    $DAEMON_START 2>&1 > /dev/null
++    su - freevo -c "$FREEVO_HOME/freevo webserver start" >/dev/null 2>&1
+     echo "done."
+     ;;
+   stop)
+     echo -n "Stopping $NAME: "
+-    $DAEMON_STOP 2>&1 > /dev/null
++    su - freevo -c "$FREEVO_HOME/freevo webserver stop" >/dev/null 2>&1
+     echo "done."
+     ;;
+   status)

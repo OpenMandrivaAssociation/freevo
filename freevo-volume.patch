@@ -1,0 +1,160 @@
+--- src/audio/xmms.py.old	2003-12-14 16:54:14.000000000 +0100
++++ src/audio/xmms.py	2003-12-20 17:24:43.000000000 +0100
+@@ -164,15 +164,16 @@
+         # XXX A better place for the major part of this code would be
+         # XXX mixer.py
+         if config.CONTROL_ALL_AUDIO:
+-            mixer.setLineinVolume(0)
+-            mixer.setMicVolume(0)
++            mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            mixer.setMicVolume(config.MINI_MIC_VOLUME)
++            mixer.setIgainVolume(config.MINI_IGAIN_VOLUME)# SB Live input from TV Card.
++            # This should _really_ be set to zero when playing other audio.
++
+             if config.MAJOR_AUDIO_CTRL == 'VOL':
+                 mixer.setPcmVolume(config.MAX_VOLUME)
+             elif config.MAJOR_AUDIO_CTRL == 'PCM':
+                 mixer.setMainVolume(config.MAX_VOLUME)
+                 
+-        mixer.setIgainVolume(0) # SB Live input from TV Card.
+-        # This should _really_ be set to zero when playing other audio.
+ 
+ 
+         
+--- src/audio/plugins/radioplayer.py.old	2003-09-22 22:36:18.000000000 +0200
++++ src/audio/plugins/radioplayer.py	2003-12-20 17:24:26.000000000 +0100
+@@ -95,9 +95,9 @@
+         print 'Radio Player Stop'
+         self.mode = 'stop'
+         mixer = plugin.getbyname('MIXER')
+-        mixer.setLineinVolume(0)
+-        mixer.setIgainVolume(0)
+-        mixer.setMicVolume(0)
++        mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++        mixer.setIgainVolume(config.MINI_IGAIN_VOLUME)
++        mixer.setMicVolume(config.MINI_MIC_VOLUME)
+         os.system('%s -m' % config.RADIO_CMD)
+ 
+ 
+--- src/plugins/ossmixer.py.old	2003-10-12 13:05:48.000000000 +0200
++++ src/plugins/ossmixer.py	2003-12-20 17:27:38.000000000 +0100
+@@ -117,8 +117,8 @@
+             _debug_("No appropriate audio channel found for mixer")
+ 
+         if config.CONTROL_ALL_AUDIO:
+-            self.setLineinVolume(0)
+-            self.setMicVolume(0)
++            self.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            self.setMicVolume(config.MINI_MIC_VOLUME)
+ 
+ 
+     def eventhandler(self, event = None, menuw=None, arg=None):
+@@ -244,14 +244,14 @@
+ 
+     def reset(self):
+         if config.CONTROL_ALL_AUDIO:
+-            self.setLineinVolume(0)
+-            self.setMicVolume(0)
++            self.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            self.setMicVolume(config.MINI_MIC_VOLUME)
+             if config.MAJOR_AUDIO_CTRL == 'VOL':
+                 self.setPcmVolume(config.MAX_VOLUME)
+             elif config.MAJOR_AUDIO_CTRL == 'PCM':
+                 self.setMainVolume(config.MAX_VOLUME)
+ 
+-        self.setIgainVolume(0) # SB Live input from TV Card.
++        self.setIgainVolume(config.MINI_IGAIN_VOLUME) # SB Live input from TV Card.
+ 
+         
+ # Simple test...
+--- src/plugins/mixer.py.old	2003-11-09 17:04:09.000000000 +0100
++++ src/plugins/mixer.py	2003-12-20 17:25:12.000000000 +0100
+@@ -128,8 +128,8 @@
+             _debug_("No appropriate audio channel found for mixer")
+ 
+         if config.CONTROL_ALL_AUDIO:
+-            self.setLineinVolume(0)
+-            self.setMicVolume(0)
++            self.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            self.setMicVolume(config.MINI_MIC_VOLUME)
+ 
+ 
+     def eventhandler(self, event = None, menuw=None, arg=None):
+@@ -264,14 +264,14 @@
+ 
+     def reset(self):
+         if config.CONTROL_ALL_AUDIO:
+-            self.setLineinVolume(0)
+-            self.setMicVolume(0)
++            self.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            self.setMicVolume(config.MINI_MIC_VOLUME)
+             if config.MAJOR_AUDIO_CTRL == 'VOL':
+                 self.setPcmVolume(config.MAX_VOLUME)
+             elif config.MAJOR_AUDIO_CTRL == 'PCM':
+                 self.setMainVolume(config.MAX_VOLUME)
+ 
+-        self.setIgainVolume(0) # SB Live input from TV Card.
++        self.setIgainVolume(config.MINI_IGAIN_VOLUME) # SB Live input from TV Card.
+ 
+         
+ # Simple test...
+--- src/tv/plugins/ivtv_basic_tv.py.old	2003-10-15 14:57:16.000000000 +0200
++++ src/tv/plugins/ivtv_basic_tv.py	2003-12-20 17:25:50.000000000 +0100
+@@ -227,9 +227,9 @@
+         
+     def Stop(self):
+         mixer = plugin.getbyname('MIXER')
+-        mixer.setLineinVolume(0)
+-        mixer.setMicVolume(0)
+-        mixer.setIgainVolume(0) # Input on emu10k cards.
++        mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++        mixer.setMicVolume(config.MINI_MIC_VOLUME)
++        mixer.setIgainVolume(config.MINI_IGAIN_VOLUME) # Input on emu10k cards.
+ 
+         self.thread.mode = 'stop'
+         self.thread.mode_flag.set()
+--- src/tv/plugins/mplayer.py.old	2003-11-06 07:08:38.000000000 +0100
++++ src/tv/plugins/mplayer.py	2003-12-20 17:26:16.000000000 +0100
+@@ -273,9 +273,9 @@
+     def Stop(self):
+         mixer = plugin.getbyname('MIXER')
+         if mixer:
+-            mixer.setLineinVolume(0)
+-            mixer.setMicVolume(0)
+-            mixer.setIgainVolume(0) # Input on emu10k cards.
++            mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            mixer.setMicVolume(config.MINI_MIC_VOLUME)
++            mixer.setIgainVolume(config.MINI_IGAIN_VOLUME) # Input on emu10k cards.
+ 
+         self.thread.stop('quit\n')
+ 
+--- src/tv/plugins/timeshift.py.old	2003-09-03 19:54:38.000000000 +0200
++++ src/tv/plugins/timeshift.py	2003-12-20 17:26:26.000000000 +0100
+@@ -223,9 +223,9 @@
+         
+     def Stop(self):
+         mixer = plugin.getbyname('MIXER')
+-        mixer.setLineinVolume(0)
+-        mixer.setMicVolume(0)
+-        mixer.setIgainVolume(0) # Input on emu10k cards.
++        mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++        mixer.setMicVolume(config.MINI_MIC_VOLUME)
++        mixer.setIgainVolume(config.MINI_IGAIN_VOLUME) # Input on emu10k cards.
+ 
+         self.thread.mode = 'stop'
+         self.thread.mode_flag.set()
+--- src/tv/plugins/tvtime.py.old	2003-12-14 16:54:14.000000000 +0100
++++ src/tv/plugins/tvtime.py	2003-12-20 17:26:37.000000000 +0100
+@@ -507,9 +507,9 @@
+     def Stop(self):
+         mixer = plugin.getbyname('MIXER')
+         if mixer:
+-            mixer.setLineinVolume(0)
+-            mixer.setMicVolume(0)
+-            mixer.setIgainVolume(0) # Input on emu10k cards.
++            mixer.setLineinVolume(config.MINI_LINEIN_VOLUME)
++            mixer.setMicVolume(config.MINI_MIC_VOLUME)
++            mixer.setIgainVolume(config.MINI_IGAIN_VOLUME) # Input on emu10k cards.
+ 
+         self.thread.stop('quit\n')
+         rc.app(self.prev_app)

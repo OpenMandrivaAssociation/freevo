@@ -1,0 +1,44 @@
+--- boot/webserver.orig	2009-08-30 13:31:12.616236902 +0100
++++ boot/webserver	2009-08-30 13:32:36.915742576 +0100
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+-# chkconfig: 234 99 00
++# chkconfig: 2345 99 00
+ # description: A boot script for the Freevo webserver.
+ #
+ # The Freevo webserver may also be started as a plugin by having 
+@@ -15,6 +15,12 @@
+ # and edited to suit your needs.
+ #
+ # $Id: webserver 3631 2003-09-06 16:36:37Z mikeruelle $
++### BEGIN INIT INFO
++# Provides: freevo_webserver
++# Default-Start: 2 3 4 5
++# Short-Description: Launch freevo web server
++# Description: Launch freevo web server
++### END INIT INFO
+ 
+ # Get startup config file
+ test -f /etc/freevo/boot_config || exit 0
+--- boot/recordserver.orig	2009-08-30 13:31:20.767237081 +0100
++++ boot/recordserver	2009-08-30 13:32:06.392702256 +0100
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+-# chkconfig: 234 99 00
++# chkconfig: 2345 99 00
+ # description: A boot script for the Freevo record server.
+ #
+ # This file may be placed in your system's init.d startup directory and
+@@ -12,6 +12,12 @@
+ # and edited to suit your needs.
+ #
+ # $Id: recordserver 3925 2003-10-05 19:50:34Z rshortt $
++### BEGIN INIT INFO
++# Provides: freevo_recordserver
++# Default-Start: 2 3 4 5
++# Short-Description: Launch freevo record server
++# Description: Launch freevo record server
++### END INIT INFO
+ 
+ # Get startup config file
+ test -f /etc/freevo/boot_config || exit 0

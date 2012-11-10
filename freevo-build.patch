@@ -1,0 +1,34 @@
+--- src/util/distutils.py.old	2008-03-22 22:31:35.000000000 +0000
++++ src/util/distutils.py	2009-08-30 13:16:32.732488276 +0100
+@@ -90,11 +90,11 @@
+ import sys
+ 
+ try:
+-    import freevo.version as version
+-    import freevo.revision as revision
+-except:
+     import version
+     import revision
++except:
++    import freevo.version as version
++    import freevo.revision as revision
+ 
+ def package_finder(result, dirname, names):
+     """
+--- src/util/distribution.py.old	2009-05-26 17:15:49.000000000 +0100
++++ src/util/distribution.py	2009-08-30 13:16:32.732488276 +0100
+@@ -87,11 +87,11 @@
+ 
+ try:
+     try:
++	import version
++        import revision
++    except ImportError:
+         import freevo.version as version
+         import freevo.revision as revision
+-    except ImportError:
+-        import version
+-        import revision
+ except ImportError:
+     print 'If your using a subversion of Freevo'
+     print 'You may need run "./autogen.sh nodocs"'
