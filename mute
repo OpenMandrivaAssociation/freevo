@@ -1,0 +1,9 @@
+#!/bin/bash
+
+unset DISPLAY
+
+#Mute InputGain & Micro
+aumix -m 0 -i R -i0 
+
+#Mute LineIn & Micro
+aumix -m 0 -l R -l0 

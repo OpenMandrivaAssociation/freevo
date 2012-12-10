@@ -1,0 +1,9 @@
+# $Id: boot_config,v 1.7 2002/10/01 19:37:19 dischi Exp $
+
+FREEVO_HOME="/usr/share/freevo"
+FBSET="/usr/sbin/fbset"
+MATROXSET=""
+FBSETDB="/usr/share/freevo/contrib/fbcon/fbset.db"
+FREEVO_LOG="/tmp/freevo/main-0.log"
+FREEVO_RES="main.py remote.py"
+VTRELEASE=""

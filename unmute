@@ -1,0 +1,14 @@
+#!/bin/bash
+
+unset DISPLAY
+if [ "$1" == "" ]; then
+VOLUME=15
+else
+VOLUME=$1
+fi
+
+#Unmute InputGain with $1 as Volume to record
+aumix -m 0 -i R -i$VOLUME
+
+#Unmute on LineIn with $1 as Volume to record
+aumix -m 0 -l R -l$VOLUME 
