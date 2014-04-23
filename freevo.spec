@@ -24,7 +24,7 @@ Source9:	unmute
 Patch0:		%{name}-build.patch
 Patch5: 	%{name}-webserver.patch
 Patch6: 	%{name}-boot.patch
-Patch7: 	%{name}-volume.patch
+
 License: 	GPLv2+
 Group: 		Video
 Buildarch:	noarch
@@ -50,7 +50,21 @@ Requires:	python-kaa-metadata
 Requires:	python-kaa-imlib2
 Requires:	python-beautifulsoup >= 3.0.3
 Requires:	python-lirc >= 0.0.4
-Requires:	mplayer, tvtime, xine-ui, xmltv, PyXML, libjpeg-progs, mencoder, cdparanoia, vorbis-tools, util-linux, python-numeric, lsdvd, python-osd, xmltv-grabbers
+Requires:	mplayer
+Requires:	tvtime
+Requires:	xine-ui
+Requires:	xmltv
+Requires:	PyXML
+Requires:	libjpeg-progs
+Requires:	mencoder
+Requires:	cdparanoia
+Requires:	vorbis-tools
+Requires:	util-linux
+Requires:	python-numeric
+Requires:	lsdvd
+Requires:	python-osd
+Requires:	xmltv-grabbers
+
 Requires(pre):  rpm-helper
 Requires(post): rpm-helper 
 Requires(post): desktop-file-utils
@@ -70,7 +84,7 @@ Available rpmbuild rebuild options :
 %patch0 -p0
 %patch5 -p0
 %patch6 -p0
-#%patch7 -p0
+
 
 %build
 find . -name CVS | xargs rm -rf
