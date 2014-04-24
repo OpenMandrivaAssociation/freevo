@@ -62,7 +62,7 @@ Requires:	vorbis-tools
 Requires:	util-linux
 Requires:	python-numeric
 Requires:	lsdvd
-Requires:	python-osd
+Requires:	pythonegg(pyosd)
 Requires:	xmltv-grabbers
 
 Requires(pre):  rpm-helper
