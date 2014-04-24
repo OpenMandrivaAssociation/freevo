@@ -31,7 +31,7 @@ Buildarch:	noarch
 
 BuildRequires: 	docbook-utils
 BuildRequires:  wget
-%py_requires
+#%%py_requires
 BuildRequires:  pygame >= 1.5
 BuildRequires:  python-twisted >= 1.1.0
 BuildRequires:  python-imaging >= 1.1.4
@@ -42,6 +42,10 @@ BuildRequires:  python-pyxml
 BuildRequires:  python-devel
 BuildRequires:	python-beautifulsoup >= 3.0.3
 BuildRequires:  python-numeric
+BuildRequires:  pkgconfig(python)
+BuildRequires:  pythonegg(setuptools)
+
+Requires:   python
 Requires:	pygame >= 1.5
 Requires:	python-twisted >= 1.1.0
 Requires:	python-imaging >= 1.1.4
