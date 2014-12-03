@@ -1,51 +1,39 @@
-%define	name 	freevo
-%define version 1.9.0
-%define release 4
-
-%define 	_cachedir /var/cache
-%define         py_ver 	  %(python -c 'import sys; print sys.version[:3]')
+%define _cachedir /var/cache
 
 # Set default freevo parameters
-%define display  x11
+%define display x11
 
-Summary:        Open-source digital video jukebox 
-Name: 		%{name}
-Version: 	%{version}
-Release: 	%{release}
-URL:            http://freevo.sourceforge.net/
-Source0: 	http://belnet.dl.sourceforge.net/sourceforge/freevo/%{name}-%{version}.tar.gz
+Summary:	Open-source digital video jukebox 
+Name:		freevo
+Version:	1.9.0
+Release:	3
+URL:		http://freevo.sourceforge.net/
+Source0:	http://belnet.dl.sourceforge.net/sourceforge/freevo/%{name}-%{version}.tar.gz
 Source11:	freevo-mail-0.6.tgz 
-Source1: 	redhat-boot_config
+Source1:	redhat-boot_config
 Source2:	local_conf.py
 Source4:	firebird.py
 Source7:	freevo_tvgrab
 Source8:	mute
 Source9:	unmute
 Patch0:		%{name}-build.patch
-Patch5: 	%{name}-webserver.patch
-Patch6: 	%{name}-boot.patch
-
-License: 	GPLv2+
-Group: 		Video
+Patch5:		%{name}-webserver.patch
+Patch6:		%{name}-boot.patch
+Patch7:		%{name}-volume.patch
+License:	GPLv2+
+Group:		Video
 Buildarch:	noarch
-
-BuildRequires: 	docbook-utils
-BuildRequires:  wget
-#%%py_requires
-BuildRequires:  pygame >= 1.5
-BuildRequires:  python-twisted >= 1.1.0
-BuildRequires:  python-imaging >= 1.1.4
-BuildRequires:  python-kaa-base
+BuildRequires:	docbook-utils
+BuildRequires:	wget
+BuildRequires:	pygame >= 1.5
+BuildRequires:	python-twisted >= 1.1.0
+BuildRequires:	python-imaging >= 1.1.4
+BuildRequires:	python-kaa-base
 BuildRequires:	python-kaa-metadata
 BuildRequires:	python-kaa-imlib2
-BuildRequires:  python-pyxml
-BuildRequires:  python-devel
+BuildRequires:	python-devel
 BuildRequires:	python-beautifulsoup >= 3.0.3
-BuildRequires:  python-numeric
-BuildRequires:  pkgconfig(python)
-BuildRequires:  pythonegg(setuptools)
-
-Requires:   python
+BuildRequires:	python-numeric
 Requires:	pygame >= 1.5
 Requires:	python-twisted >= 1.1.0
 Requires:	python-imaging >= 1.1.4
@@ -58,21 +46,18 @@ Requires:	mplayer
 Requires:	tvtime
 Requires:	xine-ui
 Requires:	xmltv
-Requires:	PyXML
 Requires:	libjpeg-progs
 Requires:	mencoder
 Requires:	cdparanoia
 Requires:	vorbis-tools
-Requires:	util-linux
 Requires:	python-numeric
 Requires:	lsdvd
-Requires:	pythonegg(pyosd)
+Requires:	python-osd
 Requires:	xmltv-grabbers
-
-Requires(pre):  rpm-helper
-Requires(post): rpm-helper 
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
+Requires(pre):	rpm-helper
+Requires(post):	rpm-helper 
+Requires(post):	desktop-file-utils
+Requires(postun):	desktop-file-utils
 
 %description
 Freevo is a Linux application that turns a PC with a TV capture card
@@ -88,7 +73,7 @@ Available rpmbuild rebuild options :
 %patch0 -p0
 %patch5 -p0
 %patch6 -p0
-
+#%patch7 -p0
 
 %build
 find . -name CVS | xargs rm -rf
@@ -97,10 +82,19 @@ find . -name "*.pyc" |xargs rm -f
 find . -name "*.pyo" |xargs rm -f
 find . -name "*.py" |xargs chmod 644
 
+#./autogen.sh
+#Building freevo
 cd $RPM_BUILD_DIR/%{name}-%{version}/
-env CFLAGS="$RPM_OPT_FLAGS" python setup.py build 
+env CFLAGS="%{optflags}" python setup.py build 
+
+#Building mail menu
+#cd $RPM_BUILD_DIR/%{name}-%{version}/*mail*
+#PYTHONPATH=../build/lib env CFLAGS="%{optflags}" python2 setup.py build
+
 
 %install
+rm -rf %{buildroot}/%{name}-%{version}
+
 mkdir -p %{buildroot}%{_sysconfdir}/freevo
 # The following is needed to let RPM know that the files should be backed up
 touch %{buildroot}%{_sysconfdir}/freevo/freevo.conf
@@ -122,41 +116,48 @@ mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 mkdir -p %{buildroot}/tmp/%{name}/Videos
 mkdir -p %{buildroot}/etc/cron.weekly
 
-python setup.py install %{?_without_compile_obj:--no-compile} --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+python setup.py install %{?_without_compile_obj:--no-compile} --root=%{buildroot} --record=INSTALLED_FILES
 
+#cp -av contrib/examples contrib/fbcon contrib/xmltv %{buildroot}%{_prefix}/contrib
 cp -av contrib/lirc/ %{buildroot}/%{_datadir}/%{name}/contrib/
 install -m 755 freevo %{buildroot}%{_datadir}/%{name}
 install -m 755 freevo_config.py %{buildroot}%{_datadir}/%{name}
-install %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/freevo/local_conf.py
-install %SOURCE7 $RPM_BUILD_ROOT/etc/cron.weekly
-install %SOURCE8 $RPM_BUILD_ROOT%{_datadir}/%{name}
-install %SOURCE9 $RPM_BUILD_ROOT%{_datadir}/%{name}
+install %SOURCE2 %{buildroot}/%{_sysconfdir}/freevo/local_conf.py
+install %SOURCE7 %{buildroot}/etc/cron.weekly
+install %SOURCE8 %{buildroot}%{_datadir}/%{name}
+install %SOURCE9 %{buildroot}%{_datadir}/%{name}
 
 #######################
 #Installing Initscripts
 #######################
+#install -m 755 boot/freevo %{buildroot}%{_sysconfdir}/rc.d/init.d
+#install -m 755 boot/freevo_dep %{buildroot}%{_sysconfdir}/rc.d/init.d
 install -m 755 boot/recordserver %{buildroot}%{_initrddir}/freevo_recordserver
 install -m 755 boot/webserver %{buildroot}%{_initrddir}/freevo_webserver
+#install -m 755 boot/recordserver_init %{buildroot}%{_bindir}/freevo_recordserver_init
+#install -m 755 boot/webserver_init %{buildroot}%{_bindir}/freevo_webserver_init
 
 ####################
 # Installing Plugins
 ####################
 # Mailer Plugin
-
-install %SOURCE4 $RPM_BUILD_ROOT/%{py_puresitedir}/freevo/plugins
+#cd $RPM_BUILD_DIR/%{name}-%{version}/*mail*
+#PYTHONPATH=../build/lib python setup.py install %{?_without_compile_obj:--no-compile} --root=%{buildroot} --record=INSTALLED_FILES
+#
+install %SOURCE4 %{buildroot}/%{py_sitedir}/freevo/plugins
 
 ###############
 # Copying icons
 ###############
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
-install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
+install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png %{buildroot}%{_liconsdir}/%{name}.png
+install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png %{buildroot}%{_iconsdir}/%{name}.png
+install -D -m 644 $RPM_BUILD_DIR/%{name}-%{version}/share/icons/misc/freevo_app.png %{buildroot}%{_miconsdir}/%{name}.png
 
 #####################
 # Adding a menu entry
 ####################
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+mkdir -p %{buildroot}%{_datadir}/applications
+cat > %{buildroot}/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=%name
 Comment=%{summary}
@@ -178,16 +179,13 @@ find %buildroot/%_datadir/locale -name "*.po" -exec rm -f {} \;
 ####################
 # Cleaning
 ####################
-rm -rf $RPM_BUILD_ROOT/%{_datadir}/fxd/web*
+rm -rf %{buildroot}/%{_datadir}/fxd/web*
 
 %pre
 %_pre_useradd %{name} %{_datadir}/%{name} /bin/bash
 
 %post
 rm -rf /var/log/freevo 2>/dev/null
-%if %mdkversion < 200900
-%{update_menus}
-%endif
 
 #Determining TV_NORM & CHANNEL_LIST from local clock
 ZONE=`grep "ZONE" /etc/sysconfig/clock | sed -e "s/^ZONE\=\(.*\)\/\(.*\)/\1/g"`
@@ -246,13 +244,6 @@ fi;
 %_preun_service freevo_recordserver
 %_preun_service freevo_webserver
 
-
-%postun
-%if %mdkversion < 200900
-%{clean_menus}
-%endif
-%_postun_userdel %{name}
-
 %files -f %name.lang
 %doc COPYING ChangeLog FAQ INSTALL README local_conf.py.example Docs/*
 %{_datadir}/%{name}
@@ -262,6 +253,9 @@ fi;
 %{_miconsdir}/freevo.png
 %{_datadir}/applications/mandriva-%{name}.desktop
 %config(noreplace) /etc/cron.weekly/*
+# Hu, even those files are need, tmpwatch will delete it !!
+#%attr(777,root,root) %dir /tmp/%{name}/Videos
+#%attr(777,root,root) %dir /tmp/%{name}/
 %attr(777,root,root) %dir %{_cachedir}/freevo
 %attr(777,root,root) %dir %{_cachedir}/freevo/audio
 %attr(777,root,root) %dir %{_cachedir}/freevo/thumbnails
@@ -270,9 +264,7 @@ fi;
 %dir %{_sysconfdir}/freevo
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/freevo/*
 %config(noreplace) %attr(755,root,root) %{_sysconfdir}/rc.d/init.d/*
-%{py_puresitedir}/freevo
-%{py_puresitedir}/*.egg-info
+%{py_sitedir}/freevo
+%{py_sitedir}/*.egg-info
 %{_defaultdocdir}/%{name}-%{version}
-
-
 
