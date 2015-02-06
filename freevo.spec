@@ -6,7 +6,7 @@
 Summary:	Open-source digital video jukebox 
 Name:		freevo
 Version:	1.9.0
-Release:	3
+Release:	4
 URL:		http://freevo.sourceforge.net/
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/freevo/%{name}-%{version}.tar.gz
 Source11:	freevo-mail-0.6.tgz 
